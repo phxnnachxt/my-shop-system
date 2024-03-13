@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * อินเทอร์เฟซ BaseRepositoryInterface
  *
- * กำหนดเมธอดพื้นฐานสำหรับการจัดการข้อมูลกับ Eloquent ORM
+ * กำหนดเมธอดพื้นฐานสำหรับการจัดการข้อมูลกับ Eloquent ORM 5555
  */
 interface BaseRepositoryInterface
 {
