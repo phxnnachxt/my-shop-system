@@ -59,4 +59,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function hasRole($roleId)
+    {
+        return $this->roles_id === $roleId;
+    }
 }
