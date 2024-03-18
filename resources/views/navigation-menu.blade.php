@@ -15,7 +15,11 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('roles.index') }}" :active="request()->routeIs('roles.index')">
+                        {{ __('Roles') }}
+                    </x-nav-link>
                 </div>
+
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
