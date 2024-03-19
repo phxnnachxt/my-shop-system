@@ -8,6 +8,21 @@
         border: 1px solid transparent;
         border-radius: 4px;
     }
+
+    .alert-error {
+        color: #c40d00;
+        background-color: #edd4d4;
+        border-color: #e6c3c3;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .btn-actions {
+        padding: 5px;
+        margin: 5px;
+    }
 </style>
 
 <x-app-layout>
@@ -19,6 +34,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if (session('error'))
+                <div class="alert alert-error">
+                    {{ session('error') }}
+                </div>
+            @endif
             @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -65,15 +85,28 @@
                                 <td class="px-6 py-4 whitespace-nowrap ">
 
                                     <div class="flex justify-center">
-                                        <a href="{{ route('roles.show', $role) }}"
-                                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
-                                            {{ __('View') }}
-                                        </a>
-                                        <a href="{{ route('roles.edit', $role->id) }}"
-                                            class="inline-flex items-center px-4 py-2 ml-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
-                                            {{ __('Edit') }}
-                                        </a>
+                                        <form>
+                                            <a href="{{ route('roles.show', $role) }}"
+                                                class="btn-actions inline-flex items-center flex-grow px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
+                                                {{ __('View') }}
+                                            </a>
+                                        </form>
+                                        <form>
+                                            <a href="{{ route('roles.edit', $role->id) }}"
+                                                class="btn-actions inline-flex items-center flex-grow px-4 py-2 ml-4 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
+                                                {{ __('Edit') }}
+                                            </a>
+                                        </form>
+                                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="btn-actions inline-flex items-center flex-grow px-4 py-2 ml-4 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-red-700 active:bg-red-900">
+                                                {{ __('Delete') }}
+                                            </button>
+                                        </form>
                                     </div>
+
 
                                 </td>
                             </tr>

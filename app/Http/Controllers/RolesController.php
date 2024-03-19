@@ -6,6 +6,7 @@ use App\Http\Requests\StoreRolesRequest;
 use App\Http\Requests\UpdateRolesRequest;
 use App\Models\Roles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RolesController extends Controller
 {
@@ -25,6 +26,11 @@ class RolesController extends Controller
     public function create()
     {
         //
+        if (Auth::user()->roles_id != 1) {
+            return redirect()->route('roles.index')
+                ->with('error', 'คุณไม่มีสิทธิในการแก้ไข');
+        }
+
         return view('roles.create');
     }
 
@@ -82,14 +88,18 @@ class RolesController extends Controller
 
         // แสดงข้อความ
         return redirect()->route('roles.index')
-            ->with('success', 'แก้ไขข้อมูล [' . implode(', ', array_keys($diff)) . '] เป็น [' . implode(', ', $newData) . '] สำเร็จ');
+            ->with('success', 'แก้ไขข้อมูล [' .
+             implode(', ', array_keys($diff)) .
+              '] เป็น [' . implode(', ', $newData) . '] สำเร็จ');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Roles $role)
     {
-        //
+        $role->delete();
+        return redirect()->route('roles.index')
+        ->with('success', 'ลบ role ใหม่สำเร็จ');
     }
 }

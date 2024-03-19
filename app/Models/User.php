@@ -60,8 +60,8 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function hasRole($roleId)
+    public function roles()
     {
-        return $this->roles_id === $roleId;
+        return $this->belongsToMany(Roles::class);
     }
 }

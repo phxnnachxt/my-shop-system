@@ -23,10 +23,33 @@ class StoreRolesRequest extends FormRequest
      */
     public function rules()
     {
+        // กำหนดกฎสำหรับการ validate input
+        // กฎเหล่านี้จะใช้ตรวจสอบว่า input ถูกต้องหรือไม่
+
         return [
-            'roles_name' => 'required|string',
-            'roles_code' => 'required|string',
-            'description' => 'nullable|string',
+            // ชื่อบทบาท
+            'roles_name' => [
+                // จำเป็นต้องระบุ
+                'required',
+                // ต้องเป็น string
+                'string',
+            ],
+
+            // รหัสบทบาท
+            'roles_code' => [
+                // จำเป็นต้องระบุ
+                'required',
+                // ต้องเป็น string
+                'string',
+            ],
+
+            // คำอธิบาย
+            'description' => [
+                // ไม่จำเป็น
+                'nullable',
+                // ต้องเป็น string
+                'string',
+            ],
         ];
     }
 }
