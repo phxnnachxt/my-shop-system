@@ -30,13 +30,13 @@ class UsersSeeder extends Seeder
             'name' => "user 1",
             'email' => "user1@example.com",
             'password' => $password,
-            'roles_id' => 2
+            'roles_id' => 3
         ]);
         DB::table('users')->insert([
             'name' => "user 2",
             'email' => "user2@example.com",
             'password' => $password,
-            'roles_id' => 2
+            'roles_id' => 3
         ]);
     }
 }

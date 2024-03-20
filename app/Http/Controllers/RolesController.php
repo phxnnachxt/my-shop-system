@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRolesRequest;
 use App\Http\Requests\UpdateRolesRequest;
 use App\Models\Roles;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class RolesController extends Controller
 {
@@ -16,8 +18,13 @@ class RolesController extends Controller
     public function index()
     {
         //
-        $roles = Roles::all();
-        return view('roles.index', compact('roles'));
+        if (Gate::allows("view", ["SADM", User::class])) {
+            $roles = Roles::all();
+            return view('roles.index', compact('roles'));
+        } else {
+            // แสดงข้อความแจ้งเตือน
+            return view('error-access');
+        }
     }
 
     /**
@@ -89,8 +96,8 @@ class RolesController extends Controller
         // แสดงข้อความ
         return redirect()->route('roles.index')
             ->with('success', 'แก้ไขข้อมูล [' .
-             implode(', ', array_keys($diff)) .
-              '] เป็น [' . implode(', ', $newData) . '] สำเร็จ');
+                implode(', ', array_keys($diff)) .
+                '] เป็น [' . implode(', ', $newData) . '] สำเร็จ');
     }
 
     /**
@@ -100,6 +107,6 @@ class RolesController extends Controller
     {
         $role->delete();
         return redirect()->route('roles.index')
-        ->with('success', 'ลบ role ใหม่สำเร็จ');
+            ->with('success', 'ลบ role ใหม่สำเร็จ');
     }
 }

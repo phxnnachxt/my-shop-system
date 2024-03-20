@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UsersController extends Controller
 {
@@ -15,9 +16,14 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
-        $users = User::all();
-        return view('users.index', compact('users'));
+        // Gate::allows() ตรวจสอบว่าผู้ใช้ มีสิทธิ์ "view" และอยู่ในกลุ่ม "SADM" หรือไม่
+        if (Gate::allows("view", ["SADM", User::class])) {
+            $users = User::all();
+            return view('users.index', compact('users'));
+        } else {
+            // แสดงข้อความแจ้งเตือน
+            return view('error-access');
+        }
     }
 
     /**
