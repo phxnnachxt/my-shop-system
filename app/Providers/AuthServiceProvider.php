@@ -4,6 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,5 +23,30 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        $this->registerPolicies();
+        Gate::before(function ($user,$ability) {
+            // กำหนดให้ Admin has access to everything.
+            if($user->checkRole('SADM')){
+                return true;
+            }
+        });
+
+        Gate::define('SADM', function ($user) {
+            return $user->checkRole('SADM');
+            //return false;
+        });
+
+        Gate::define('MOD', function ($user) {
+            return $user->checkRole('MOD');
+            //return false;
+        });
+        Gate::define('EDT', function ($user) {
+            return $user->checkRole('EDT');
+            //return false;
+        });
+        Gate::define('VWR', function ($user) {
+            return $user->checkRole('VWR');
+            //return false;
+        });
     }
 }

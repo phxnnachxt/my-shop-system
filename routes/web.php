@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+    // return redirect()->route('login');
 });
 
 Route::middleware([
@@ -29,3 +31,4 @@ Route::middleware([
 });
 
 Route::resource('roles', RolesController::class);
+Route::resource('users', UsersController::class);

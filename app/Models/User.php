@@ -60,8 +60,17 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany(Roles::class);
+        // ฟังก์ชันนี้ใช้ดึงข้อมูล Role ที่เกี่ยวข้องกับ User 1 คน
+        // ผลลัพธ์ที่ได้จะเป็น Eloquent Relationship object
+        return $this->belongsTo(Roles::class, 'roles_id');
+    }
+
+    public function checkRole($roles_code)
+    {
+        // ฟังก์ชันนี้ใช้ตรวจสอบว่า User 1 คนมี Role ตรงกับ $roles_code หรือไม่
+        // ผลลัพธ์ที่ได้จะเป็น boolean (true หรือ false)
+        return strtolower($this->role->roles_code) == strtolower($roles_code);
     }
 }
