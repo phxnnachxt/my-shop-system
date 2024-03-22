@@ -22,6 +22,16 @@
                 {{ __('Add User') }}
             </a>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <center>
+                    <h3>laravel-livewire</h3>
+                </center>
+
+                <livewire:user />
+
+                {{-- @livewireScripts --}}
+
+                <hr><br><br><br><br>
+
                 <table class="w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
@@ -40,7 +50,9 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {{ __('Actions') }}
+                                <div class="flex justify-center">
+                                    {{ __('Actions') }}
+                                </div>
                             </th>
                         </tr>
                     </thead>

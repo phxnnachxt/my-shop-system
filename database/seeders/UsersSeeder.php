@@ -38,5 +38,47 @@ class UsersSeeder extends Seeder
             'password' => $password,
             'roles_id' => 3
         ]);
+        DB::table('users')->insert([
+            'name' => "user 3",
+            'email' => "user3@example.com",
+            'password' => $password,
+            'roles_id' => 3
+        ]);
+        DB::table('users')->insert([
+            'name' => "user 4",
+            'email' => "user4@example.com",
+            'password' => $password,
+            'roles_id' => 3
+        ]);
+        DB::table('users')->insert([
+            'name' => "user 5",
+            'email' => "user5@example.com",
+            'password' => $password,
+            'roles_id' => 3
+        ]);
+        DB::table('users')->insert([
+            'name' => "user 6",
+            'email' => "user6@example.com",
+            'password' => $password,
+            'roles_id' => 3
+        ]);
+        DB::table('users')->insert([
+            'name' => "user 7",
+            'email' => "user7@example.com",
+            'password' => $password,
+            'roles_id' => 3
+        ]);
+        DB::table('users')->insert([
+            'name' => "user 8",
+            'email' => "user8@example.com",
+            'password' => $password,
+            'roles_id' => 3
+        ]);
+        DB::table('users')->insert([
+            'name' => "user 9",
+            'email' => "user9@example.com",
+            'password' => $password,
+            'roles_id' => 3
+        ]);
     }
 }
