@@ -26,15 +26,15 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
             'userById'
         ]
     )->name('user.by.id');
+
+    Route::post(
+        '/userWithDatatable',
+        [
+            \App\Http\Controllers\APIs\UserController::class,
+            'userWithDatatable'
+        ]
+    )->name('user.with.datatable');
+
 });
 
 
-// Route::group(['middleware' => 'api'], function () {
-//     Route::post(
-//         '/userById',
-//         [
-//             \App\Http\Controllers\APIs\UserController::class,
-//             'userById'
-//         ]
-//     )->name('user.by.id');
-// });

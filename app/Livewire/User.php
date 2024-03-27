@@ -21,7 +21,7 @@ class User extends Component
         // โดยใช้ฟังก์ชัน search ที่สร้างขึ้นก่อนหน้านี้
         return view('livewire.user', [
             'users' => ModelsUser::search(['name', 'email'], $this->search, 'contains', 'or')->paginate(5),
-        ]);;
+        ]);
 
         // return view('livewire.user', [
         //     'users' => ModelsUser::paginate(5),

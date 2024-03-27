@@ -17,11 +17,15 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <a href="{{ route('users.create') }}"
-                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
-                {{ __('Add User') }}
-            </a>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+
+                <center>
+                    <h3>laravel-datatable</h3>
+                </center>
+
+                <livewire:data-table />
+                <hr><br><br><br><br>
+
                 <center>
                     <h3>laravel-livewire</h3>
                 </center>
@@ -32,6 +36,11 @@
 
                 <hr><br><br><br><br>
 
+
+                <a href="{{ route('users.create') }}"
+                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
+                    {{ __('Add User') }}
+                </a>
                 <table class="w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>

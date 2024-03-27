@@ -4,12 +4,10 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
-use TimWassenburg\RepositoryGenerator\Repository\BaseRepository;
-
 /**
  * Class UserRepository.
  */
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class UserRepository extends MasterRepository implements UserRepositoryInterface
 {
     /**
      * UserRepository constructor.
