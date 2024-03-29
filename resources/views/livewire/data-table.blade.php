@@ -79,7 +79,8 @@
                             <div class="col-span-6 sm:col-span-4">
                                 <label for="roles" class="block text-sm font-medium text-gray-700">สิทธิ์</label>
                                 <select name="roles" id="roles"
-                                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" disabled>
+                                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    disabled>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}">{{ $role->roles_name }}</option>
                                     @endforeach
@@ -91,7 +92,11 @@
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:py-4">
                     <div class="flex flex-row-reverse">
                         <button type="button"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="hidden btn-sm-update mt-3 w-full inline-flex justify-center rounded-md bg-indigo-500 border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            อัพเดทข้อมูล
+                        </button>
+                        <button type="button"
+                            class="btn-sm-close mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
                             ปิด
                         </button>
                     </div>
@@ -170,12 +175,12 @@
                                             {{ __('View') }}
                                         </a>
 
-                                        <a class="btn-actions inline-flex items-center flex-grow px-4 py-2 ml-4 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
+                                        <a class="btn-edit btn-actions inline-flex items-center flex-grow px-4 py-2 ml-4 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-gray-700 active:bg-gray-900">
                                             {{ __('Edit') }}
                                         </a>
 
                                         <button type="submit"
-                                            class="btn-actions inline-flex items-center flex-grow px-4 py-2 ml-4 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-red-700 active:bg-red-900">
+                                            class="btn-delete btn-actions inline-flex items-center flex-grow px-4 py-2 ml-4 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-red-700 active:bg-red-900">
                                             {{ __('Delete') }}
                                         </button>
 
@@ -247,6 +252,40 @@
                 // เลือก option ที่มี value ตรงกับ row.id
                 $('#roles').val(row.role.id).trigger('change');
             }
+            $('#roles').prop('disabled', true);
+
+            $('.btn-sm-update').addClass('hidden');
+            // แสดง Modal
+            $('#modal-view').show();
+        });
+
+        $(document).on('click', '.btn-edit', function() {
+
+            var rows = list_table.rows().data();
+            var row = list_table.row($(this).parents('tr')).data();
+            var rowIndex = list_table.row($(this).parents('tr')).index();
+
+            // เติมข้อมูลลงใน Modal
+            $('#name').val(row.name);
+            $('#email').val(row.email);
+            $('#roles').val(row.roles);
+
+            // ตรวจสอบว่า row.roles ว่างหรือไม่
+            if (!row.role || row.role === 'undefined' || row.role === null) {
+                // Clear Select
+                $('#roles').val('').trigger('change');
+            } else {
+                // เลือก option ที่มี value ตรงกับ row.id
+                $('#roles').val(row.role.id).trigger('change');
+            }
+            //ปลด disabled select roles
+            $('#roles').prop('disabled', false);
+            // เพิ่ม attribute data-id
+
+            // แก้ไข data-id ของปุ่ม btn-sm-update
+            $('.btn-sm-update').data('user', row.id);
+
+            $('.btn-sm-update').removeClass('hidden');
 
             // แสดง Modal
             $('#modal-view').show();
@@ -254,6 +293,108 @@
 
         $(document).on('click', '#modal-view button', function() {
             $('#modal-view').hide();
+
         });
+
+        $(document).on('click', '.btn-sm-update', function() {
+            var userId = $(this).data('user');
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const roles = document.getElementById('roles').value;
+            Swal.fire({
+                title: 'ยืนยันการอัพเดทข้อมูล',
+                text: 'คุณต้องการอัพเดทข้อมูลผู้ใช้ ' + name + ' ใช่หรือไม่ ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "put",
+                        url: "{{ route('user.update') }}",
+                        data: {
+                            name: name,
+                            email: email,
+                            roles_id: roles,
+                            userId: userId,
+                        },
+                        dataType: 'JSON',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.code == 200) {
+                                Swal.fire({
+                                    title: response.message,
+                                    text: 'ข้อมูลผู้ใช้ ' + name +
+                                        ' ได้รับการอัพเดทแล้ว',
+                                    icon: 'success',
+                                });
+                                list_table.clear().draw();
+                            } else {
+                                Swal.fire({
+                                    title: 'เกิดข้อผิดพลาด',
+                                    text: response.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'ตกลง',
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('click', '.btn-delete', function() {
+            var row = list_table.row($(this).parents('tr')).data();
+            var userId = row.id;
+            Swal.fire({
+                title: 'ยืนยันการลบข้อมูล',
+                text: 'คุณต้องการลบข้อมูลผู้ใช้ ( ' + userId +' : '+row.name+ ' ) ใช่หรือไม่ ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "delete",
+                        url: "{{ route('user.delete') }}",
+                        data: {
+                            userId: userId,
+                        },
+                        dataType: 'JSON',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.code == 200) {
+                                Swal.fire({
+                                    title: response.message,
+                                    text: 'ข้อมูลผู้ใช้ ( ' + userId +' : '+row.name+ ' ) ได้รับการลบแล้ว',
+                                    icon: 'success',
+                                });
+                                list_table.clear().draw();
+                            } else {
+                                Swal.fire({
+                                    title: 'เกิดข้อผิดพลาด',
+                                    text: response.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'ตกลง',
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+
     });
 </script>

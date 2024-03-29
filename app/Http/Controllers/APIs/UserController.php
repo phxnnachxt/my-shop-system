@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 use App\Repositories\UserRepositoryInterface;
 
+use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class UserController extends Controller
 {
     private $user;
@@ -15,6 +18,76 @@ class UserController extends Controller
     {
         $this->user = $userRepositoryInterface;
     }
+
+
+
+    public function deleteApi(Request $request)
+    {
+        $data = $request->all();
+        $userId = $data['userId'];
+
+        // ตรวจสอบค่า null
+        if (!$userId) {
+            return response()->json([
+                'message' => 'ไม่พบผู้ใช้',
+                'code' => 404,
+            ], 404);
+        }
+
+        try {
+            // อัปเดตข้อมูล
+            $user = $this->user->find($userId);
+            $user->delete();
+
+            // ลบข้อมูลสำเร็จ
+            return response()->json([
+                'message' => 'ลบข้อมูลสำเร็จ',
+                'code' => 200,
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            // ผู้ใช้ไม่ถูกพบ
+            return response()->json([
+                'message' => 'ไม่พบผู้ใช้',
+                'code' => 404,
+            ], 404);
+        } catch (\Exception $e) {
+            // อัพเดทไม่สำเร็จ
+            return response()->json([
+                'message' => 'ลบข้อมูลไม่สำเร็จ',
+                'code' => 500,
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function updateApi(Request $request)
+    {
+        $data = $request->all();
+        $updat = [
+            'email' => $data['email'],
+            'name' => $data['name'],
+            'roles_id' => $data['roles_id'],
+        ];
+
+        try {
+            // อัปเดตข้อมูล
+            $this->user->update($data['userId'], $updat);
+
+            // อัพเดทสำเร็จ
+            return response()->json([
+                'message' => 'อัปเดตข้อมูลสำเร็จ',
+                'code' => 200,
+            ]);
+        } catch (\Exception $e) {
+            // อัพเดทไม่สำเร็จ
+            return response()->json([
+                'message' => 'อัปเดตข้อมูลไม่สำเร็จ',
+                'code' => 500,
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
 
     public function userById(Request $request)
     {

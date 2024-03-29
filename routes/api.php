@@ -35,6 +35,16 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
         ]
     )->name('user.with.datatable');
 
+
 });
 
 
+Route::put('/users/update', [
+    \App\Http\Controllers\APIs\UserController::class,
+    'updateApi'
+])->name('user.update');
+
+Route::delete('/users/delete', [
+    \App\Http\Controllers\APIs\UserController::class,
+    'deleteApi'
+])->name('user.delete');
