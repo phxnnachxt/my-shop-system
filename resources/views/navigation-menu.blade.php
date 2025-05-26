@@ -11,9 +11,19 @@
                 </div>
 
                 <!-- Navigation Links -->
+                
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Homepage') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('drinks.index')" :active="request()->routeIs('drinks.index')">
+                        {{ __('เครื่องดื่ม') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.index')">
+                        {{ __('ลูกค้า') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.index')">
+                        {{ __('ออเดอร์') }}
                     </x-nav-link>
                     <!-- ตรวจสอบสิทธิ์ของผู้ใช้ว่าเป็นผู้ดูแลระบบหรือไม่ -->
                     @can('SADM')
